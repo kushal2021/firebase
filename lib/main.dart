@@ -106,7 +106,7 @@ class _firstState extends State<first> {
               print(value);
             });
 
-          }, child: Text("Gmail"))
+          }, child: Text("Gmail login"))
         ],
       ),
     );
