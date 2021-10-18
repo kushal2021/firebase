@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>imgpuzzle.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000000;}
+.s1 { color: #008000; font-weight: bold;}
+.s2 { color: #000080; font-weight: bold;}
+.s3 { color: #0000ff;}
+.s4 { color: #808080; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+imgpuzzle.dart</font>
+</center></td></tr></table>
+<pre>import <span class="s1">'package:flutter/material.dart'</span>;
+
+<span class="s2">class </span>imgpuzzle <span class="s2">extends </span>StatefulWidget {
+  <span class="s2">const </span>imgpuzzle({Key? key}) : <span class="s2">super</span>(key: key);
+
+  @override
+  _imgpuzzleState createState() =&gt; _imgpuzzleState();
+}
+
+<span class="s2">class </span>_imgpuzzleState <span class="s2">extends </span>State&lt;imgpuzzle&gt; {
+
+  List&lt;String&gt; imglist=[<span class="s1">&quot;car1.png&quot;</span>,<span class="s1">&quot;car2.png&quot;</span>,<span class="s1">&quot;car3.png&quot;</span>,<span class="s1">&quot;car4.png&quot;</span>,<span class="s1">&quot;car1.png&quot;</span>,<span class="s1">&quot;car2.png&quot;</span>,<span class="s1">&quot;car3.png&quot;</span>,<span class="s1">&quot;car4.png&quot;</span>,<span class="s1">&quot;car5.png&quot;</span>,<span class="s1">&quot;car6.png&quot;</span>,<span class="s1">&quot;car5.png&quot;</span>,<span class="s1">&quot;car6.png&quot;</span>];
+  List&lt;bool&gt;? visiblelist;
+  int t=<span class="s3">0</span>;
+  int? pos1,pos2;
+  @override
+  <span class="s2">void </span>initState() {
+    <span class="s4">// TODO: implement initState</span>
+    <span class="s2">super</span>.initState();
+    imglist.shuffle();
+    visiblelist=List.filled(imglist.length, <span class="s2">true</span>);
+    Future.delayed(Duration(seconds: <span class="s3">5</span>)).then((value) {
+      setState(() {
+        visiblelist=List.filled(imglist.length, <span class="s2">false</span>);
+      });
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    <span class="s2">return </span>Scaffold(
+      appBar: AppBar(),
+      body: GridView.builder(
+        itemCount: imglist.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: <span class="s3">3</span>,
+          crossAxisSpacing: <span class="s3">10</span>,
+          mainAxisSpacing: <span class="s3">10</span>
+        ),
+        itemBuilder: (context, index) {
+        <span class="s2">return </span>Container(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                <span class="s2">if</span>(!visiblelist![index] &amp;&amp; t==<span class="s3">0</span>)
+                  {
+                    print(<span class="s1">&quot;firstclick&quot;</span>);
+                    visiblelist![index]=<span class="s2">true</span>;
+                    pos1=index;
+                    t=<span class="s3">1</span>;
+                  }
+                <span class="s2">if</span>(!visiblelist![index] &amp;&amp; t==<span class="s3">1</span>)
+                {
+                  print(<span class="s1">&quot;secondclick&quot;</span>);
+                  visiblelist![index]=<span class="s2">true</span>;
+                  pos2=index;
+                  print(imglist[pos1!]);
+                  print(imglist[pos2!]);
+                  <span class="s2">if</span>(imglist[pos1!]!=imglist[pos2!])
+                    {
+                      Future.delayed(Duration(seconds:<span class="s3">1</span>)).then((value) {
+                        setState(() {
+                          visiblelist![pos1!]=<span class="s2">false</span>;
+                          visiblelist![pos2!]=<span class="s2">false</span>;
+                          t=<span class="s3">0</span>;
+                          <span class="s2">if</span>(!visiblelist!.contains(<span class="s2">false</span>))
+                            {
+                              print(<span class="s1">&quot;win&quot;</span>);
+                            }
+                        });
+                      });
+                    }
+                  <span class="s2">else</span>{
+                    Future.delayed(Duration(seconds:<span class="s3">1</span>)).then((value) {
+                      setState(() {
+                        visiblelist![pos1!]=<span class="s2">true</span>;
+                        visiblelist![pos2!]=<span class="s2">true</span>;
+                        t=<span class="s3">0</span>;
+                        <span class="s2">if</span>(!visiblelist!.contains(<span class="s2">false</span>))
+                        {
+                          print(<span class="s1">&quot;win&quot;</span>);
+                        }
+                      });
+                    });
+                  }
+
+                }
+              });
+            },
+            child: Visibility(
+              visible: visiblelist![index],
+              replacement: Container(color: Colors.green,),
+              child: Image.asset(<span class="s1">&quot;images/</span>${imglist[index]}<span class="s1">&quot;</span>),
+            ),
+          ),
+        );
+      },),
+    );
+  }
+}
+</pre>
+</body>
+</html>
